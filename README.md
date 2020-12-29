@@ -17,7 +17,7 @@ to run the tests.
 ### Assumptions
 
 - I'm recalculating the 60 seconds window at every addition of a Tick
-but i'm also assuming that the API might no receive some Tick for more than one second,
+but i'm also assuming that the API might not receive some Tick for more than one second,
 so that's why i created a Timer that will update the value at every second.
 - I know the Timer Task is single threaded but (being optimistic here)
 i don't expect the calculation to take more than one second, so delays will be avoided
