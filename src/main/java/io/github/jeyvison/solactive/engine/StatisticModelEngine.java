@@ -15,63 +15,54 @@ public class StatisticModelEngine {
     private AtomicReferenceArray<StatisticModel> statistics = new AtomicReferenceArray<>(60);
     private volatile StatisticModel statisticModel = null;
 
-    public StatisticModelEngine(){
+    public StatisticModelEngine() {
         Timer timer = new Timer(true);
-        timer.schedule(new StatisticCalculator(), 1000L,1000L);
+        timer.schedule(new StatisticCalculator(), 1000L, 1000L);
 
     }
 
-    public void compute(double price, long timestamp){
-       int seconds = Math.abs((int)Duration.of(timestamp, ChronoUnit.MILLIS).get(ChronoUnit.SECONDS));
+    public void compute(double price, long timestamp) {
+        int seconds = Math.abs((int) Duration.of(timestamp, ChronoUnit.MILLIS).get(ChronoUnit.SECONDS));
 
-       int index = seconds % statistics.length();
+        int index = seconds % statistics.length();
 
         statistics.updateAndGet(index, (statisticModel) -> {
-           if(statisticModel == null){
-               return new StatisticModel(seconds, price, price, price, price, 1);
-           }
+            if (statisticModel == null) {
+                return new StatisticModel(seconds, price, price, price, price, 1);
+            }
 
-           if(statisticModel.getSecond() <= seconds){
-               double sum = statisticModel.getSum() + price;
-               double max = Math.max(statisticModel.getMax(), price);
-               double min = Math.min(statisticModel.getMin(), price);
-               long count = statisticModel.getCount() + 1;
-               double average = sum / count;
+            if (statisticModel.getSecond() <= seconds) {
+                double sum = statisticModel.getSum() + price;
+                double max = Math.max(statisticModel.getMax(), price);
+                double min = Math.min(statisticModel.getMin(), price);
+                long count = statisticModel.getCount() + 1;
+                double average = sum / count;
 
-               return new StatisticModel(seconds, average, sum , max, min, count);
-           }
+                return new StatisticModel(seconds, average, sum, max, min, count);
+            }
 
-           return statisticModel;
+            return statisticModel;
 
-       });
-       recalculate();
+        });
+        recalculate();
     }
 
-    public StatisticModel getStatisticModel(){
+    public StatisticModel getStatisticModel() {
         return statisticModel;
     }
 
-    private class StatisticCalculator extends TimerTask {
+    private void recalculate() {
 
-        @Override
-        public void run() {
-            recalculate();
-        }
-    }
+        int from = (int) Duration.of(System.currentTimeMillis(), ChronoUnit.MILLIS).minus(59, ChronoUnit.SECONDS).get(ChronoUnit.SECONDS);
+        int to = (int) Duration.of(System.currentTimeMillis(), ChronoUnit.MILLIS).get(ChronoUnit.SECONDS);
 
-
-    private void recalculate(){
-
-        int from = (int)Duration.of(System.currentTimeMillis(), ChronoUnit.MILLIS).minus(59, ChronoUnit.SECONDS).get(ChronoUnit.SECONDS);
-        int to = (int)Duration.of(System.currentTimeMillis(), ChronoUnit.MILLIS).get(ChronoUnit.SECONDS);
-
-        StatisticModel baseStatisticModel = new StatisticModel(0,0,0,0,0,0);
+        StatisticModel baseStatisticModel = new StatisticModel(0, 0, 0, 0, 0, 0);
 
         statisticModel = IntStream.rangeClosed(from, to)
                 .mapToObj(index -> statistics.get(index % statistics.length()))
                 .filter(Objects::nonNull)
-                .reduce(baseStatisticModel,(result, statisticModel) -> {
-                    if(result == baseStatisticModel){
+                .reduce(baseStatisticModel, (result, statisticModel) -> {
+                    if (result == baseStatisticModel) {
                         return statisticModel;
                     }
 
@@ -83,5 +74,13 @@ public class StatisticModelEngine {
 
                     return new StatisticModel(0, average, sum, max, min, count);
                 });
+    }
+
+    private class StatisticCalculator extends TimerTask {
+
+        @Override
+        public void run() {
+            recalculate();
+        }
     }
 }

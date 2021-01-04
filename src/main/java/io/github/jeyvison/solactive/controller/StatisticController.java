@@ -18,7 +18,7 @@ public class StatisticController {
     private StatisticModelService statisticModelService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/statistics")
-    public Statistic getStatistic(){
+    public Statistic getStatistic() {
 
         StatisticModel statisticModel = statisticModelService.getStatisticModel();
 
@@ -26,16 +26,16 @@ public class StatisticController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/statistics/{instrument_identifier}")
-    public ResponseEntity<Statistic> getStatistic(@PathVariable("instrument_identifier") String instrumentIdentifier){
+    public ResponseEntity<Statistic> getStatistic(@PathVariable("instrument_identifier") String instrumentIdentifier) {
 
         StatisticModel statisticModel = statisticModelService.getStatisticModel(instrumentIdentifier);
 
-        if(statisticModel == null){
+        if (statisticModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(
-                new Statistic(statisticModel.getAverage(), statisticModel.getMax(),statisticModel.getMin(),
+                new Statistic(statisticModel.getAverage(), statisticModel.getMax(), statisticModel.getMin(),
                         statisticModel.getCount()),
                 HttpStatus.FOUND);
     }

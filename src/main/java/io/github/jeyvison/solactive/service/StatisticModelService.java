@@ -1,7 +1,7 @@
 package io.github.jeyvison.solactive.service;
 
-import io.github.jeyvison.solactive.model.StatisticModel;
 import io.github.jeyvison.solactive.engine.StatisticModelEngine;
+import io.github.jeyvison.solactive.model.StatisticModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

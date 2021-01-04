@@ -2,10 +2,10 @@ package io.github.jeyvison.solactive.dto;
 
 public class Statistic {
 
+    long count;
     private double average;
     private double max;
     private double min;
-    long count;
 
     public Statistic(double average, double max, double min, long count) {
         this.average = average;

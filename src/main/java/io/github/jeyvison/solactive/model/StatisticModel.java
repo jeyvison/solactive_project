@@ -4,11 +4,11 @@ package io.github.jeyvison.solactive.model;
 public class StatisticModel {
 
     int second;
+    long count;
     private double average;
     private double sum;
     private double max;
     private double min;
-    long count;
 
     public StatisticModel(int second, double average, double sum, double max, double min, long count) {
         this.sum = sum;

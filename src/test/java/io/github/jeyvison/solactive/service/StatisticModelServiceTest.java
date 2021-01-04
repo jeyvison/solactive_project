@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class StatisticModelServiceTest {
 
     @Test
-    void getStatistic(){
+    void getStatistic() {
         StatisticModelService statisticModelService = new StatisticModelService();
 
         statisticModelService.addStatisticModel("IBM.N", 100.0, System.currentTimeMillis() - 2000);
@@ -19,14 +19,14 @@ class StatisticModelServiceTest {
 
         StatisticModel statisticModel = statisticModelService.getStatisticModel();
 
-        Assert.assertEquals(140.0, statisticModel.getAverage(),0);
-        Assert.assertEquals(5,statisticModel.getCount());
+        Assert.assertEquals(140.0, statisticModel.getAverage(), 0);
+        Assert.assertEquals(5, statisticModel.getCount());
         Assert.assertEquals(200.0, statisticModel.getMax(), 0);
         Assert.assertEquals(100.0, statisticModel.getMin(), 0);
     }
 
     @Test
-    void getStatisticByInstrument(){
+    void getStatisticByInstrument() {
         StatisticModelService statisticModelService = new StatisticModelService();
 
         statisticModelService.addStatisticModel("IBM.N", 100, System.currentTimeMillis());
@@ -46,7 +46,7 @@ class StatisticModelServiceTest {
     }
 
     @Test
-    void getStatisticWithInvalidInstrument(){
+    void getStatisticWithInvalidInstrument() {
         StatisticModelService statisticModelService = new StatisticModelService();
 
         StatisticModel statisticModel = statisticModelService.getStatisticModel("non.existent.instrument");

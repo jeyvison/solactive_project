@@ -7,7 +7,7 @@ public class Tick {
     private double price;
     private long timestamp;
 
-    public Tick(String instrument, double price, long timestamp){
+    public Tick(String instrument, double price, long timestamp) {
         this.instrument = instrument;
         this.price = price;
         this.timestamp = timestamp;
